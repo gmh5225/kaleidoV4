@@ -1,5 +1,15 @@
 # Progetto Compilatore Kaleidoscope - Readme
 
+## Note
+
+Il progetto inizia con la modifica dei file contenuti nella directory fornita nel drive del corso "Kaleidoscope1.1-with_expr_if".
+ 
+Non verrà riportato in questo readme il codice scritto per ogni nodo, in quanto ogni modifica ai file originali è stata commentata in questo formato:
+
+```
+//K4: Commento inerente alle righe di codice successive
+```
+
 ## Descrizione del Progetto
 
 Questo progetto si propone di implementare un compilatore per il linguaggio Kaleidoscope. Il linguaggio è descritto da una grammatica su 4 livelli.
@@ -169,3 +179,4 @@ Value* BlockAST::codegen(driver& drv) {
   return blockvalue;
 };
 ```
+
