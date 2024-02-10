@@ -111,7 +111,7 @@ block:
 
 Per il quale è necessario il riconoscimento delle parentesi graffe.
 
-```flex
+```lex
 "{"      return yy::parser::make_LBRACE    (loc);
 "}"      return yy::parser::make_RBRACE    (loc);
 ```
