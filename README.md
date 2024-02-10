@@ -108,3 +108,10 @@ block:
 | "{" vardefs ";" stmts "}" { $$ = new BlockAST($2,$4); }
 ;
 ```
+
+Per il quale è necessario il riconoscimento delle parentesi graffe.
+
+```flex
+"{"      return yy::parser::make_LBRACE    (loc);
+"}"      return yy::parser::make_RBRACE    (loc);
+```
