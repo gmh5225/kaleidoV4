@@ -8,7 +8,7 @@ Questo progetto si propone di implementare un compilatore per il linguaggio Kale
 
 La grammatica di primo livello del linguaggio Kaleidoscope è definita come segue:
 
-```bnf
+```grammatica livello 1
 % start startsymb ;
 
 startsymb :
@@ -24,4 +24,87 @@ top :
 | external stmts :
 | globalvar
 
+definition :
+    "def" proto block
+
+external:
+    "extern" proto
+
+proto:
+    "id" "(" idseq ")"
+
+globalvar :
+    "global" "id"
+
+idseq :
+    %empty
+|   "id" idseq
+
+% left ":";
+% left " <" "==";
+% left "+" " -";
+% left "*" "/";
+
+stmts :
+    stmt
+|   stmt ";" stmts
+
+stmt :
+    assignment
+|   block
+|   exp
+
+assignment:
+    "id" "=" exp
+
+block : 
+    "{" stmts "}"
+|   "{" vardefs ";" stmts "}"
+
+vardefs:
+    binding
+|   vardefs ";" binding
+
+initexp:
+    %empty
+|   "=" exp
+
+condexp:
+    binding : exp " <" exp
+|   exp "==" exp
+
+exp:
+    exp "+" exp 
+|   exp " -" exp
+|   exp "*" exp
+|   exp "/" exp
+|   idexp
+|   "(" exp ")"
+|   "number"
+|   expif
+
+idexp:
+    "id"
+|   "id" "(" optexp ")"
+
+explist:
+    exp
+|   exp " ," explist
+
+optexp:
+    %empty
+|   explist
+
+```
+
+## Implementazione Primo Livello
+
+Per implementarla ho aggiunto le varie produzioni richieste al file Bison parser.yy e i simboli necessari per riconoscerle nel file Flex scanner.ll.
+Ad esempio:
+
+```parser.yy
+block:
+  "{" stmts "}"             { $$ = new BlockAST($2); } 
+| "{" vardefs ";" stmts "}" { $$ = new BlockAST($2,$4); }
+;
 ```
