@@ -2,35 +2,26 @@
 
 ## Descrizione del Progetto
 
-Questo progetto si propone di implementare un compilatore per il linguaggio Kaleidoscope. Il linguaggio è descritto da una grammatica di primo livello, e successive versioni del progetto si concentrano su miglioramenti e estensioni della grammatica.
+Questo progetto si propone di implementare un compilatore per il linguaggio Kaleidoscope. Il linguaggio è descritto da una grammatica su 4 livelli.
 
 ## Grammatica di Primo Livello
 
-La grammatica di primo livello del linguaggio Kaleidoscope è definita nel file `grammatica.kl` come segue:
+La grammatica di primo livello del linguaggio Kaleidoscope è definita come segue:
 
 ```bnf
-% start startsymb ; globalvar :
-" global " "id"
+% start startsymb ;
 
 startsymb :
-program idseq :
-% empty
-program : | "id" idseq
-% empty
-| top ";" program % left ":";
-% left " <" "==";
-top : % left "+" " -";
-% empty % left "*" "/";
+    program
+
+program :
+    % empty
+    | top ";" program
+
+top : 
+  %empty 
 | definition
 | external stmts :
-| globalvar stmt
+| globalvar
 
-| stmt ";" stmts
-
-definition :
-" def " proto block stmt :
-assignment
-external : | block
-" extern " proto | exp
-proto : assignment
-"id" "(" idseq ")" "id" "=" exp
+```
