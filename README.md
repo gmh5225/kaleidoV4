@@ -4,7 +4,7 @@
 
 Il progetto inizia con la modifica dei file contenuti nella directory fornita nel drive del corso "Kaleidoscope1.1-with_expr_if".
  
-Non verrà riportato in questo readme il codice scritto per ogni nodo, in quanto ogni modifica ai file originali è stata commentata in questo formato:
+In questo readme non verrà riportato il codice scritto per ogni nodo, in quanto ogni modifica ai file originali è stata commentata in questo formato:
 
 ```
 //K4: Commento inerente alle righe di codice successive
@@ -179,4 +179,64 @@ Value* BlockAST::codegen(driver& drv) {
   return blockvalue;
 };
 ```
+
+
+## Grammatica di Primo Livello
+
+La grammatica di secondo livello del linguaggio Kaleidoscope richiede di implementare degli statement:
+
+```
+stmt :
+    assignment
+|   block
+|   ifstmt
+|   forstmt
+|   exp
+
+ifstmt :
+    "if" "(" condexp ")" stmt
+|   "if" "(" condexp ")" stmt " else " stmt
+
+forstmt :
+    " for " "(" init ";" condexp ";" assignment ")" stmt
+
+init :
+    binding
+|   assignment
+```
+
+## Implementazione Secondo Livello
+
+E' stato necessario aggiungere i nodi StatementAST, che è un _container_ per le classi IfStatementAST, ForStatementAST. 
+
+```hpp
+//K4: Classe per la rappresentazione dello statement "if"
+
+class IfStatementAST: public StatementAST{
+  private:
+    ExprAST* cond;
+    StatementAST* TrueBlock; 
+    StatementAST* FalseBlock; 
+  public:
+    IfStatementAST(ExprAST* cond, StatementAST* TrueBlock, StatementAST* FalseBlock);
+    IfStatementAST(ExprAST* cond, StatementAST* TrueBlock);
+    Value* codegen(driver& drv) override;
+};
+
+//K4: Classe per la rappresentazione dello statement "for"
+
+class ForStatementAST: public StatementAST{
+  private:
+    InitAST* Init;
+    ExprAST* Cond;
+    AssignmentExprAST* Inc;
+    StatementAST* Body;
+  public:
+    ForStatementAST(InitAST* Init, ExprAST* Cond, AssignmentExprAST* Inc, StatementAST* Body);
+    Value* codegen(driver& drv) override;
+};
+```
+
+**IfStatementAST** ha due constructor diversi in quanto può essere un "if" statement o un "if else" statement. Il suo metodo **codegen** è molto simile a quello di **IfExprAST**.
+**ForStatementAST** ha metodo codegen che oltre a produrre codice per un ciclo for è in grado di supportare il ripristino delle variabili originali in caso di _binding_ dopo l'esecuzione del ciclo.
 
