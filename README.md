@@ -102,7 +102,7 @@ optexp:
 Per implementarla ho aggiunto le varie produzioni richieste al file Bison parser.yy e i simboli necessari per riconoscerle nel file Flex scanner.ll.
 Ad esempio:
 
-```parser.yy
+```bison
 block:
   "{" stmts "}"             { $$ = new BlockAST($2); } 
 | "{" vardefs ";" stmts "}" { $$ = new BlockAST($2,$4); }
